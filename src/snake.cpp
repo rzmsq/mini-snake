@@ -24,8 +24,11 @@ const void Snake::draw(SDL_Renderer *_renderer) const
 
 void Snake::change_state(const short &_state)
 {
-    prevState = state;
-    state = _state;
+    if (state != _state)
+    {
+        prevState = state;
+        state = _state;
+    }
 }
 
 const void Snake::auto_move()
@@ -47,11 +50,63 @@ const void Snake::auto_move()
                 break;
             }
         }
+        else if (prevState == stateCodeSnake::up)
+        {
+            if (len.size() > 1 && len[1].y1 != len[0].y1)
+            {
+                for (size_t i = 1; i < len.size(); i++)
+                {
+                    mv.up(len, i);
+                    len[0].x1 += 1;
+                    len[0].x2 += 1;
+                }
+                break;
+            }
+        }
+        else if (prevState == stateCodeSnake::left && len.size() > 1)
+        {
+            mv.left(len, 0);
+            this->prevState = stateCodeSnake::left;
+            break;
+        }
         mv.right(len, 0);
         break;
     }
     case stateCodeSnake::left:
     {
+        if (prevState == stateCodeSnake::down)
+        {
+            if (len.size() > 1 && len[1].y1 != len[0].y1)
+            {
+                for (size_t i = 1; i < len.size(); i++)
+                {
+                    mv.down(len, i);
+                    len[0].x1 -= 1;
+                    len[0].x2 -= 1;
+                }
+                break;
+            }
+        }
+        else if (prevState == stateCodeSnake::up)
+        {
+            if (len.size() > 1 && len[1].y1 != len[0].y1)
+            {
+                for (size_t i = 1; i < len.size(); i++)
+                {
+                    mv.up(len, i);
+                    len[0].x1 -= 1;
+                    len[0].x2 -= 1;
+                }
+                break;
+            }
+        }
+        else if (prevState == stateCodeSnake::right && len.size() > 1)
+        {
+            // std::cerr << prevState << "\n";
+            mv.right(len, 0);
+            this->prevState = stateCodeSnake::right;
+            break;
+        }
         mv.left(len, 0);
         break;
     }
