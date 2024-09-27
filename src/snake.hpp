@@ -87,5 +87,6 @@ public:
     const void change_state(const short &_state);
     const void auto_move();
     const bool check_eat(const std::tuple<int, int> &_coords);
+    const void check_hit();
     const int get_state() const;
 };

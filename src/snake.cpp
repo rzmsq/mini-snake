@@ -80,6 +80,28 @@ const bool Snake::check_eat(const std::tuple<int, int> &_coords)
     return false;
 }
 
+const void Snake::check_hit()
+{
+    if (body.size() > 2)
+    {
+        for (size_t i = 1; i < body.size(); i++)
+        {
+            if ((body[0].x2 <= body[i].x2 &&
+                 body[0].x1 >= body[i].x1 &&
+                 body[0].y2 <= body[i].y2 &&
+                 body[0].y1 >= body[i].y1))
+            {
+                std::cerr << "hit\n";
+            }
+        }
+    }
+    if (body[0].x2 <= 0 || body[0].x2 >= 190 ||
+        body[0].y2 <= 0 || body[0].y2 >= 210)
+    {
+        std::cerr << "hit\n";
+    }
+}
+
 const int Snake::get_state() const
 {
     return this->state;

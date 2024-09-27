@@ -61,6 +61,7 @@ int main(int argc, char const *argv[])
 
                 snake.auto_move();
                 flg = snake.check_eat(apple.get_coord());
+                snake.check_hit();
                 snake.draw(renderer);
                 apple.draw(renderer);
 
