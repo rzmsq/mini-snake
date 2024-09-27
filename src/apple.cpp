@@ -13,8 +13,8 @@ const void Apple::set_coords()
 {
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distrib_x(3, 187);
-    std::uniform_int_distribution<> distrib_y(3, 197);
+    std::uniform_int_distribution<> distrib_x(this->size, 175);
+    std::uniform_int_distribution<> distrib_y(this->size, 195);
     this->x = {distrib_x(gen)};
     this->y = {distrib_y(gen)};
 }

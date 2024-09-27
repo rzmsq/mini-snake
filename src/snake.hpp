@@ -20,18 +20,10 @@ private:
         int x1, x2, y1, y2;
     };
 
-    std::vector<Block> len;
-    int head{0}, body{1};
-    bool changeDirection{false};
-
-    short prevState{stateCodeSnake::right};
+    std::vector<Block> body;
     short state{stateCodeSnake::right};
 
     const void add_block();
-    const bool move_half_body_R();
-    const bool move_half_body_L();
-    const bool move_half_body_U();
-    const bool move_half_body_D();
 
     union move
     {
@@ -92,10 +84,8 @@ public:
     ~Snake();
 
     const void draw(SDL_Renderer *_renderer) const;
-    void change_state(const short &_state);
+    const void change_state(const short &_state);
     const void auto_move();
     const bool check_eat(const std::tuple<int, int> &_coords);
-    const short get_state() const;
-    const int get_head() const;
-    const int get_body() const;
+    const int get_state() const;
 };

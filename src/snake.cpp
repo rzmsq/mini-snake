@@ -8,7 +8,7 @@ Snake::Snake()
     head.x2 = {90};
     head.y1 = {100};
     head.y2 = {110};
-    len.push_back(head);
+    body.push_back(head);
 }
 
 Snake::~Snake()
@@ -17,15 +17,14 @@ Snake::~Snake()
 
 const void Snake::draw(SDL_Renderer *_renderer) const
 {
-    for (size_t i = 0; i < len.size(); i++)
-        boxRGBA(_renderer, this->len[i].x1, this->len[i].y1, this->len[i].x2, this->len[i].y2,
+    for (size_t i = 0; i < body.size(); i++)
+        boxRGBA(_renderer, this->body[i].x1, this->body[i].y1, this->body[i].x2, this->body[i].y2,
                 this->color.r, this->color.g, this->color.b, this->color.a);
 }
 
-void Snake::change_state(const short &_state)
+const void Snake::change_state(const short &_state)
 {
-    if (state != _state)
-        state = _state;
+    state = _state;
 }
 
 const void Snake::auto_move()
@@ -34,22 +33,22 @@ const void Snake::auto_move()
     {
     case stateCodeSnake::right:
     {
-        mv.right(len);
+        mv.right(body);
         break;
     }
     case stateCodeSnake::left:
     {
-        mv.left(len);
+        mv.left(body);
         break;
     }
     case stateCodeSnake::up:
     {
-        mv.up(len);
+        mv.up(body);
         break;
     }
     case stateCodeSnake::down:
     {
-        mv.down(len);
+        mv.down(body);
         break;
     }
     default:
@@ -59,52 +58,21 @@ const void Snake::auto_move()
 
 const void Snake::add_block()
 {
-    Block body = Block();
-    switch (state)
-    {
-    case stateCodeSnake::right:
-    {
-        body.x1 = len[len.size() - 1].x1 - 10;
-        body.x2 = len[len.size() - 1].x2 - 10;
-        body.y1 = len[len.size() - 1].y1;
-        body.y2 = len[len.size() - 1].y2;
-        break;
-    }
-    case stateCodeSnake::left:
-    {
-        body.x1 = len[len.size() - 1].x1 + 10;
-        body.x2 = len[len.size() - 1].x2 + 10;
-        body.y1 = len[len.size() - 1].y1;
-        body.y2 = len[len.size() - 1].y2;
-        break;
-    }
-    case stateCodeSnake::up:
-    {
-        body.x1 = len[len.size() - 1].x1;
-        body.x2 = len[len.size() - 1].x2;
-        body.y1 = len[len.size() - 1].y1 + 10;
-        body.y2 = len[len.size() - 1].y2 + 10;
-        break;
-    }
-    case stateCodeSnake::down:
-    {
-        body.x1 = len[len.size() - 1].x1;
-        body.x2 = len[len.size() - 1].x2;
-        body.y1 = len[len.size() - 1].y1 - 10;
-        body.y2 = len[len.size() - 1].y2 - 10;
-        break;
-    }
-    default:
-        break;
-    }
+    Block newBody = Block();
+    newBody.x1 = body[body.size() - 1].x1;
+    newBody.x2 = body[body.size() - 1].x2;
+    newBody.y1 = body[body.size() - 1].y1;
+    newBody.y2 = body[body.size() - 1].y2;
 
-    len.push_back(body);
+    body.push_back(newBody);
 }
 
 const bool Snake::check_eat(const std::tuple<int, int> &_coords)
 {
-    if ((std::get<0>(_coords) - 5) <= len.front().x2 && (std::get<0>(_coords) + 5) >= len.front().x1 &&
-        (std::get<1>(_coords) - 5) <= len.front().y2 && (std::get<1>(_coords) + 5) >= len.front().y1)
+    if ((std::get<0>(_coords) - 5) <= body.front().x2 &&
+        (std::get<0>(_coords) + 5) >= body.front().x1 &&
+        (std::get<1>(_coords) - 5) <= body.front().y2 &&
+        (std::get<1>(_coords) + 5) >= body.front().y1)
     {
         this->add_block();
         return true;
@@ -112,16 +80,7 @@ const bool Snake::check_eat(const std::tuple<int, int> &_coords)
     return false;
 }
 
-const short Snake::get_state() const
+const int Snake::get_state() const
 {
     return this->state;
-}
-
-const int Snake::get_head() const
-{
-    return this->head;
-}
-const int Snake::get_body() const
-{
-    return this->body;
 }
