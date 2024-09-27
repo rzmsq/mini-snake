@@ -18,16 +18,20 @@ private:
     struct Block
     {
         int x1, x2, y1, y2;
-        bool changeDirect{false};
     };
 
     std::vector<Block> len;
     int head{0}, body{1};
+    bool changeDirection{false};
 
     short prevState{stateCodeSnake::right};
     short state{stateCodeSnake::right};
 
     const void add_block();
+    const bool move_half_body_R();
+    const bool move_half_body_L();
+    const bool move_half_body_U();
+    const bool move_half_body_D();
 
     union move
     {
@@ -39,17 +43,17 @@ private:
                 _len[i].x2 += 1;
             }
         }
-        const void left(std::vector<Block> &_len, const short &_start)
+        const void left(std::vector<Block> &_len, const short &_start, const short &_end)
         {
-            for (size_t i = _start; i < _len.size(); i++)
+            for (size_t i = _start; i < _end; i++)
             {
                 _len[i].x1 -= 1;
                 _len[i].x2 -= 1;
             }
         }
-        const void up(std::vector<Block> &_len, const short &_start)
+        const void up(std::vector<Block> &_len, const short &_start, const short &_end)
         {
-            for (size_t i = _start; i < _len.size(); i++)
+            for (size_t i = _start; i < _end; i++)
             {
                 _len[i].y1 -= 1;
                 _len[i].y2 -= 1;
@@ -63,6 +67,14 @@ private:
                 _len[i].y2 += 1;
             }
         }
+
+        // const void downRight(Block &_body, Block &_head)
+        // {
+        //     _body.y1 += 1;
+        //     _body.y2 += 1;
+        //     _head.x1 += 1;
+        //     _head.x2 += 1;
+        // }
     };
 
     move mv;
