@@ -1,5 +1,5 @@
-#include "snake.hpp"
-#include "apple.hpp"
+#include "../headers/snake.hpp"
+#include "../headers/apple.hpp"
 
 const int screen_width{180};
 const int screen_height{200};
@@ -9,6 +9,8 @@ int main(int argc, char const *argv[])
     SDL_Window *window{nullptr};
     SDL_Surface *screenSurface{nullptr};
     SDL_Renderer *renderer{nullptr};
+    SDL_Surface *surfaceMessage{nullptr};
+    SDL_Texture *message{nullptr};
 
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         std::cerr << "SDL could not initialize! SDL_Error: " << SDL_GetError() << '\n';
@@ -23,8 +25,18 @@ int main(int argc, char const *argv[])
         else
         {
             const SDL_Color bgColor = {128, 128, 128};
+            SDL_Color fontColor = {255, 255, 255};
+
             Snake snake = Snake();
             Apple apple = Apple();
+
+            TTF_Font *Sans = TTF_OpenFont("../OpenSans-Regular.ttf", 36);
+
+            SDL_Rect message_rect;
+            message_rect.x = 5;
+            message_rect.y = 0;
+            message_rect.w = 50;
+            message_rect.h = 50;
 
             SDL_Event e;
             bool quit{false}, flg{false};
@@ -68,6 +80,13 @@ int main(int argc, char const *argv[])
                 if (flg)
                     apple.respawn();
 
+                std::string scoreTxt = "Score: " + std::to_string(snake.get_score());
+
+                surfaceMessage =
+                    TTF_RenderText_Solid(Sans, scoreTxt.c_str(), fontColor);
+                message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
+                SDL_RenderCopy(renderer, message, NULL, &message_rect);
+
                 SDL_RenderPresent(renderer);
 
                 SDL_Delay(150);
@@ -75,6 +94,8 @@ int main(int argc, char const *argv[])
         }
     }
 
+    SDL_FreeSurface(surfaceMessage);
+    SDL_DestroyTexture(message);
     SDL_DestroyWindow(window);
     TTF_Quit();
     SDL_Quit();

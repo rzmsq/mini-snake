@@ -22,8 +22,10 @@ private:
 
     std::vector<Block> body;
     short state{stateCodeSnake::right};
+    short score{0};
 
     const void add_block();
+    const void respawn();
 
     union move
     {
@@ -89,4 +91,5 @@ public:
     const bool check_eat(const std::tuple<int, int> &_coords);
     const void check_hit();
     const int get_state() const;
+    const int get_score() const;
 };

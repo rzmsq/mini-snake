@@ -1,5 +1,4 @@
-#include "snake.hpp"
-#include "move_func.cpp"
+#include "../headers/snake.hpp"
 
 Snake::Snake()
 {
@@ -75,6 +74,7 @@ const bool Snake::check_eat(const std::tuple<int, int> &_coords)
         (std::get<1>(_coords) + 5) >= body.front().y1)
     {
         this->add_block();
+        this->score++;
         return true;
     }
     return false;
@@ -91,18 +91,36 @@ const void Snake::check_hit()
                  body[0].y2 <= body[i].y2 &&
                  body[0].y1 >= body[i].y1))
             {
-                std::cerr << "hit\n";
+                this->respawn();
             }
         }
     }
     if (body[0].x2 <= 0 || body[0].x2 >= 190 ||
         body[0].y2 <= 0 || body[0].y2 >= 210)
     {
-        std::cerr << "hit\n";
+        this->respawn();
     }
+}
+
+const void Snake::respawn()
+{
+    body.clear();
+    this->score = 0;
+
+    Block head = Block();
+    head.x1 = {80};
+    head.x2 = {90};
+    head.y1 = {100};
+    head.y2 = {110};
+    body.push_back(head);
 }
 
 const int Snake::get_state() const
 {
     return this->state;
+}
+
+const int Snake::get_score() const
+{
+    return this->score;
 }
