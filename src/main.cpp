@@ -69,7 +69,7 @@ int main(int argc, char const *argv[])
 
                 SDL_RenderPresent(renderer);
 
-                SDL_Delay(25);
+                SDL_Delay(150);
             }
         }
     }

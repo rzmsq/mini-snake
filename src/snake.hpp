@@ -35,46 +35,54 @@ private:
 
     union move
     {
-        const void right(std::vector<Block> &_len, const short &_start, const short &_end)
+        const void right(std::vector<Block> &_len)
         {
-            for (size_t i = _start; i < _end; i++)
+            for (size_t i = _len.size() - 1; i >= 1; i--)
             {
-                _len[i].x1 += 1;
-                _len[i].x2 += 1;
+                _len[i].x1 = _len[i - 1].x1;
+                _len[i].x2 = _len[i - 1].x2;
+                _len[i].y1 = _len[i - 1].y1;
+                _len[i].y2 = _len[i - 1].y2;
             }
+            _len[0].x1 += 10;
+            _len[0].x2 += 10;
         }
-        const void left(std::vector<Block> &_len, const short &_start, const short &_end)
+        const void left(std::vector<Block> &_len)
         {
-            for (size_t i = _start; i < _end; i++)
+            for (size_t i = _len.size() - 1; i >= 1; i--)
             {
-                _len[i].x1 -= 1;
-                _len[i].x2 -= 1;
+                _len[i].x1 = _len[i - 1].x1;
+                _len[i].x2 = _len[i - 1].x2;
+                _len[i].y1 = _len[i - 1].y1;
+                _len[i].y2 = _len[i - 1].y2;
             }
+            _len[0].x1 -= 10;
+            _len[0].x2 -= 10;
         }
-        const void up(std::vector<Block> &_len, const short &_start, const short &_end)
+        const void up(std::vector<Block> &_len)
         {
-            for (size_t i = _start; i < _end; i++)
+            for (size_t i = _len.size() - 1; i >= 1; i--)
             {
-                _len[i].y1 -= 1;
-                _len[i].y2 -= 1;
+                _len[i].x1 = _len[i - 1].x1;
+                _len[i].x2 = _len[i - 1].x2;
+                _len[i].y1 = _len[i - 1].y1;
+                _len[i].y2 = _len[i - 1].y2;
             }
+            _len[0].y1 -= 10;
+            _len[0].y2 -= 10;
         }
-        const void down(std::vector<Block> &_len, const short &_start, const short &_end)
+        const void down(std::vector<Block> &_len)
         {
-            for (size_t i = _start; i < _end; i++)
+            for (size_t i = _len.size() - 1; i >= 1; i--)
             {
-                _len[i].y1 += 1;
-                _len[i].y2 += 1;
+                _len[i].x1 = _len[i - 1].x1;
+                _len[i].x2 = _len[i - 1].x2;
+                _len[i].y1 = _len[i - 1].y1;
+                _len[i].y2 = _len[i - 1].y2;
             }
+            _len[0].y1 += 10;
+            _len[0].y2 += 10;
         }
-
-        // const void downRight(Block &_body, Block &_head)
-        // {
-        //     _body.y1 += 1;
-        //     _body.y2 += 1;
-        //     _head.x1 += 1;
-        //     _head.x2 += 1;
-        // }
     };
 
     move mv;

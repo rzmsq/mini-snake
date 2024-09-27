@@ -2,6 +2,7 @@
 #include <vector>
 #include <random>
 #include <tuple>
+#include <list>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
