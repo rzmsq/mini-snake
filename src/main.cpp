@@ -39,13 +39,17 @@ int main(int argc, char const *argv[])
                         break;
                     case SDL_KEYDOWN:
                     {
-                        if (e.key.keysym.sym == SDLK_RIGHT)
+                        if (e.key.keysym.sym == SDLK_RIGHT &&
+                            snake.get_state() != stateCodeSnake::left)
                             snake.change_state(stateCodeSnake::right);
-                        if (e.key.keysym.sym == SDLK_LEFT)
+                        if (e.key.keysym.sym == SDLK_LEFT &&
+                            snake.get_state() != stateCodeSnake::right)
                             snake.change_state(stateCodeSnake::left);
-                        if (e.key.keysym.sym == SDLK_UP)
+                        if (e.key.keysym.sym == SDLK_UP &&
+                            snake.get_state() != stateCodeSnake::down)
                             snake.change_state(stateCodeSnake::up);
-                        if (e.key.keysym.sym == SDLK_DOWN)
+                        if (e.key.keysym.sym == SDLK_DOWN &&
+                            snake.get_state() != stateCodeSnake::up)
                             snake.change_state(stateCodeSnake::down);
                     }
                     default:
@@ -56,10 +60,12 @@ int main(int argc, char const *argv[])
                 SDL_RenderClear(renderer);
 
                 snake.auto_move();
-                if (!flg)
-                    flg = snake.check_eat(apple.get_coord());
+                flg = snake.check_eat(apple.get_coord());
                 snake.draw(renderer);
                 apple.draw(renderer);
+
+                if (flg)
+                    apple.respawn();
 
                 SDL_RenderPresent(renderer);
 

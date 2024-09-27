@@ -43,9 +43,8 @@ const void Snake::auto_move()
             {
                 for (size_t i = 1; i < len.size(); i++)
                 {
-                    mv.down(len, i);
-                    len[0].x1 += 1;
-                    len[0].x2 += 1;
+                    mv.down(len, i, len.size());
+                    mv.right(len, 0, len.size()-1);
                 }
                 break;
             }
@@ -63,13 +62,7 @@ const void Snake::auto_move()
                 break;
             }
         }
-        else if (prevState == stateCodeSnake::left && len.size() > 1)
-        {
-            mv.left(len, 0);
-            this->prevState = stateCodeSnake::left;
-            break;
-        }
-        mv.right(len, 0);
+        mv.right(len, 0, len.size());
         break;
     }
     case stateCodeSnake::left:
@@ -80,7 +73,7 @@ const void Snake::auto_move()
             {
                 for (size_t i = 1; i < len.size(); i++)
                 {
-                    mv.down(len, i);
+                    mv.down(len, i, len.size());
                     len[0].x1 -= 1;
                     len[0].x2 -= 1;
                 }
@@ -100,24 +93,69 @@ const void Snake::auto_move()
                 break;
             }
         }
-        else if (prevState == stateCodeSnake::right && len.size() > 1)
-        {
-            // std::cerr << prevState << "\n";
-            mv.right(len, 0);
-            this->prevState = stateCodeSnake::right;
-            break;
-        }
         mv.left(len, 0);
         break;
     }
     case stateCodeSnake::up:
     {
+        if (prevState == stateCodeSnake::left)
+        {
+            if (len.size() > 1 && len[1].x1 != len[0].x1)
+            {
+                for (size_t i = 1; i < len.size(); i++)
+                {
+                    mv.left(len, i);
+                    len[0].y1 -= 1;
+                    len[0].y2 -= 1;
+                }
+                break;
+            }
+        }
+        else if (prevState == stateCodeSnake::right)
+        {
+            if (len.size() > 1 && len[1].x1 != len[0].x1)
+            {
+                for (size_t i = 1; i < len.size(); i++)
+                {
+                    mv.right(len, i, len.size());
+                    len[0].y1 -= 1;
+                    len[0].y2 -= 1;
+                }
+                break;
+            }
+        }
         mv.up(len, 0);
         break;
     }
     case stateCodeSnake::down:
     {
-        mv.down(len, 0);
+        if (prevState == stateCodeSnake::left)
+        {
+            if (len.size() > 1 && len[1].x1 != len[0].x1)
+            {
+                for (size_t i = 1; i < len.size(); i++)
+                {
+                    mv.left(len, i);
+                    len[0].y1 += 1;
+                    len[0].y2 += 1;
+                }
+                break;
+            }
+        }
+        else if (prevState == stateCodeSnake::right)
+        {
+            if (len.size() > 1 && len[1].x1 != len[0].x1)
+            {
+                for (size_t i = 1; i < len.size(); i++)
+                {
+                    mv.right(len, i, len.size());
+                    len[0].y1 += 1;
+                    len[0].y2 += 1;
+                }
+                break;
+            }
+        }
+        mv.down(len, 0, len.size());
         break;
     }
     default:
@@ -178,4 +216,18 @@ const bool Snake::check_eat(const std::tuple<int, int> &_coords)
         return true;
     }
     return false;
+}
+
+const short Snake::get_state() const
+{
+    return this->state;
+}
+
+const int Snake::get_head() const
+{
+    return this->head;
+}
+const int Snake::get_body() const
+{
+    return this->body;
 }

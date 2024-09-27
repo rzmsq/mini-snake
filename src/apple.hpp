@@ -9,10 +9,13 @@ private:
 
     int x, y, size{5};
 
+    const void set_coords();
+
 public:
     Apple();
     ~Apple();
 
     const void draw(SDL_Renderer *_renderer) const;
     const std::tuple<int, int> get_coord() const;
+    const void respawn();
 };
